@@ -24,7 +24,7 @@ class HotelReservationManager {
     private var reservationIDCounter: Int = 1
     
     func addReservation(clients: [Client], duration: Int, breakfastOption: Bool) throws -> Reservation {
-        for client in clients {
+        clients.forEach {client in
             assert(!isClientAlreadyBooked(client), "Client is already booked in another reservation.")
         }
         
@@ -74,6 +74,9 @@ class HotelReservationManager {
         return false
     }
 }
+
+/* En los test podemos añadir o mover los clientes, o cambiar
+ los parámetros, para realizar distintas pruebas*/
 
 func testAddReservation() {
     let manager = HotelReservationManager()
@@ -138,7 +141,7 @@ func testAddReservation() {
             default:
                 break
             }
-        } catch let err {
+        } catch let err{
             error = err
         }
     }
@@ -159,7 +162,7 @@ func testCancelReservation() {
     
     while reservation == nil {
         do {
-            reservation = try manager.addReservation(clients: [client1, client2, client3, client4], duration: 3, breakfastOption: true)
+            reservation = try manager.addReservation(clients: [client1, client2], duration: 3, breakfastOption: true)
             print("Reservation added:", reservation!)
         } catch let reservationError as ReservationError {
             switch reservationError {
@@ -290,5 +293,4 @@ func testReservationPrice() {
 testAddReservation()
 testCancelReservation()
 testReservationPrice()
-
 
